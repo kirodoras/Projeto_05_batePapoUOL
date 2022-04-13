@@ -151,3 +151,9 @@ function sendMsg(elemento){
         console.log(localMsg.value);
     }
 }
+
+document.addEventListener("keypress", function(e){
+    if(e.key === "Enter"){
+        sendMsg();
+    }
+})
