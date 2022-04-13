@@ -134,5 +134,20 @@ entrarNaSala();
 let localMsg = '';
 function sendMsg(elemento){
     localMsg = document.querySelector('input')
-    console.log(localMsg.value);
+    if(localMsg.value !== ''){
+        msg.from = user.name;
+        msg.to = 'Todos';
+        msg.text = localMsg.value;
+        msg.type = 'message';
+        let promise = axios.post('https://mock-api.driven.com.br/api/v6/uol/messages', msg);
+
+        promise.then(function (){
+            buscarMensagens();
+            localMsg.value = '';
+        });
+        promise.catch(function(){
+            window.location.reload();
+        });
+        console.log(localMsg.value);
+    }
 }
