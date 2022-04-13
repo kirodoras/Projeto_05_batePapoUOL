@@ -15,22 +15,24 @@
             <img src="imagens/logo-1.png">
         </div>
         <div class="user">
-            <ion-icon name="people"></ion-icon>
+            <button>
+                <ion-icon name="people"></ion-icon>
+            </button>
         </div>
     </header>
     <main>
         <ul>
             <li>
-                <span class="horario">
+                <span class="time">
                     (09:21:45)
                 </span>
-                <span class="nome">
+                <span class="name-from">
                       João  
                 </span>
-                <span class="acao">
+                <span class="msg-text">
                     reservadamente para
                 </span>
-                <span class="nome-for">
+                <span class="msg-to">
                     Maria:
                 </span>
                 <span lass="msg-text">
@@ -101,7 +103,10 @@
             <ion-icon name="paper-plane-outline"></ion-icon>
         </div>
     </footer>
-    <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
-    <script src=""></script>
+
+    <script type="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule="" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="scripts/script.js"></script>
 </body>
 </html>

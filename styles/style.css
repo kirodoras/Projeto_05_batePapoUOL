@@ -22,7 +22,7 @@ ion-icon {
 }
 
 body {
-    background-color: bisque;
+    background-color: var(--cor-main-bg);
 
     display: flex;
     align-items: center;
