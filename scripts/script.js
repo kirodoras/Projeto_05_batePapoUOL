@@ -4,11 +4,12 @@ let user = {
 
 let msg = {
 	from: "nome do usuário",
-	to: "nome do destinatário (Todos se não for um específico)",
+	to: 'Todos',
 	text: "mensagem digitada",
-	type: "message" // ou "private_message" para o bônus
+	type: 'message' // ou "private_message" para o bônus
 }
 
+let listaParticipantes = document.querySelector('.lista-participantes');
 function entrarNaSala (){
     user.name = prompt("Digite seu nome:");  
 
@@ -19,6 +20,7 @@ function entrarNaSala (){
 }
 
 function tratarSucesso(resposta){
+    msg.from = user.name;
     console.log("Resposta recebida com sucesso! Status code: " + resposta.status);
 
     if(resposta.status === 200){
@@ -123,7 +125,7 @@ function showMsg(array){
     for(i = 0; i < array.length; i++){
         spaceMsg.innerHTML += array[i];
     }
-    document.querySelector('li:last-child').scrollIntoView();
+    document.querySelector('ul li:last-child').scrollIntoView();
 }
 
 function clearMsg (){
@@ -135,10 +137,7 @@ let localMsg = '';
 function sendMsg(elemento){
     localMsg = document.querySelector('input')
     if(localMsg.value !== ''){
-        msg.from = user.name;
-        msg.to = 'Todos';
         msg.text = localMsg.value;
-        msg.type = 'message';
         let promise = axios.post('https://mock-api.driven.com.br/api/v6/uol/messages', msg);
 
         promise.then(function (){
@@ -146,14 +145,84 @@ function sendMsg(elemento){
             localMsg.value = '';
         });
         promise.catch(function(){
+            alert("Usuário desconectado");
             window.location.reload();
         });
         console.log(localMsg.value);
     }
 }
 
-document.addEventListener("keypress", function(e){
+document.addEventListener("keydown", function(e){
     if(e.key === "Enter"){
         sendMsg();
     }
 })
+
+function buscarParticipantes(){
+    let promise = axios.get('https://mock-api.driven.com.br/api/v6/uol/participants');
+    listaParticipantes.innerHTML = "";
+    promise.then(function (resposta){
+        listaParticipantes.innerHTML += `
+            <li onclick="selectTo(this)">
+                <div>
+                    <ion-icon name="people"></ion-icon>
+                    <pre>  </pre>
+                    <span>Todos</span>
+                </div>
+                <ion-icon name="checkmark-outline" class="hidden check-to"></ion-icon>
+            </li>`;
+        for(let i = 0; i < resposta.data.length; i++){
+            listaParticipantes.innerHTML += `
+            <li onclick="selectTo(this)">
+                <div>
+                    <ion-icon name="person-circle"></ion-icon>
+                    <pre>  </pre>
+                    <span>${resposta.data[i].name}</span>
+                </div>
+            <ion-icon name="checkmark-outline" class="hidden"></ion-icon>
+             </li>`;
+        }
+    });
+    promise.catch(function(){
+        alert("Erro em buscar participantes");
+    });
+}
+
+setInterval(buscarParticipantes, 10000);
+
+function openMenu(){
+    const menu = document.querySelector('.menu-lateral');
+    menu.classList.remove('hidden');
+    buscarParticipantes()
+}
+
+function closeMenu(){
+    const menu = document.querySelector('.menu-lateral');
+    menu.classList.add('hidden');
+    listaParticipantes.innerHTML = "";
+}
+
+function selectVisibilidade(which) {
+    const select = document.querySelector('.check-visibilidade');
+    if(select !== null){
+        select.classList.toggle('check-visibilidade');
+    }
+    which.querySelector('ion-icon:last-child').classList.toggle('check-visibilidade');
+
+    if(which.querySelector('span').innerHTML === "Público"){
+        msg.type = 'message';
+    }
+
+    if(which.querySelector('span').innerHTML === "Reservadamente"){
+        msg.type = 'private_message';
+    }
+}
+
+function selectTo(which) {
+    const select = document.querySelector('.check-to');
+    if(select !== null){
+        select.classList.toggle('check-to');
+    }
+    which.querySelector('ion-icon:last-child').classList.toggle('check-to');
+    msg.to = which.querySelector('span').innerHTML;
+}
