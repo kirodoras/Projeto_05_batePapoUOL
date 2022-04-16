@@ -10,6 +10,17 @@
     <title>Bate-Papo UOL</title>
 </head>
 <body>
+    <div class="tela-de-entrada">
+        <div class="entrada-logo">
+            <img src="imagens/logo-2.png" alt="">
+        </div>
+        <div class="entrada-nome">
+            <input type="text" placeholder="Digite seu nome">
+        </div>
+        <div class="entrada-entrar" onclick="getUserName(this)">
+            <button type="button">Entrar</button>
+        </div>
+    </div>
     <div class="menu-lateral hidden">
         <div class="fundo-transparente" onclick="closeMenu()">
         </div>
@@ -66,6 +77,9 @@
     <footer>
         <div class="digite">
             <input type="text" placeholder="Escreva aqui...">
+            <div class="digite-status hidden">
+                Enviando para Todos (reservadamente)
+            </div>
         </div>
         <div class="envie" onclick="sendMsg(this)">
             <ion-icon name="paper-plane-outline"></ion-icon>

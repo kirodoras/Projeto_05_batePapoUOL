@@ -11,8 +11,8 @@ let msg = {
 
 let listaParticipantes = document.querySelector('.lista-participantes');
 function entrarNaSala (){
-    user.name = prompt("Digite seu nome:");  
-
+    /*user.name = prompt("Digite seu nome:");*/
+    /*user.name = getUserName();*/
     let promise = axios.post('https://mock-api.driven.com.br/api/v6/uol/participants ', user);
 
     promise.then(tratarSucesso);
@@ -28,8 +28,10 @@ function tratarSucesso(resposta){
         setInterval(function(){
             let promise = axios.post('https://mock-api.driven.com.br/api/v6/uol/status', user);
             promise.then(iAmOnline);
-            buscarMensagens();
         },3000);
+        setInterval(function(){
+            buscarMensagens();
+        },4900);
     }
 }
 
@@ -131,18 +133,18 @@ function showMsg(array){
 function clearMsg (){
     spaceMsg.innerHTML = "";
 }
-entrarNaSala();
+/*entrarNaSala();*/
 
 let localMsg = '';
 function sendMsg(elemento){
-    localMsg = document.querySelector('input')
+    localMsg = document.querySelector('.digite input');
     if(localMsg.value !== ''){
         msg.text = localMsg.value;
         let promise = axios.post('https://mock-api.driven.com.br/api/v6/uol/messages', msg);
 
         promise.then(function (){
-            buscarMensagens();
             localMsg.value = '';
+            buscarMensagens();
         });
         promise.catch(function(){
             alert("Usuário desconectado");
@@ -202,6 +204,7 @@ function closeMenu(){
     listaParticipantes.innerHTML = "";
 }
 
+let inputStatus = document.querySelector('.digite-status');
 function selectVisibilidade(which) {
     const select = document.querySelector('.check-visibilidade');
     if(select !== null){
@@ -211,10 +214,13 @@ function selectVisibilidade(which) {
 
     if(which.querySelector('span').innerHTML === "Público"){
         msg.type = 'message';
+        inputStatus.classList.add('hidden');
     }
 
     if(which.querySelector('span').innerHTML === "Reservadamente"){
         msg.type = 'private_message';
+        inputStatus.classList.remove('hidden');
+        inputStatus.innerHTML = `Enviando para ${msg.to} (reservadamente)`;
     }
 }
 
@@ -225,4 +231,14 @@ function selectTo(which) {
     }
     which.querySelector('ion-icon:last-child').classList.toggle('check-to');
     msg.to = which.querySelector('span').innerHTML;
+    inputStatus.innerHTML = `Enviando para ${msg.to} (reservadamente)`;
+}
+
+function getUserName(elemento){
+    localName = document.querySelector('.entrada-nome input');
+    if(localName.value !== ''){
+        elemento.parentNode.classList.add('hidden');
+        user.name = localName.value;
+        entrarNaSala();
+    }
 }
