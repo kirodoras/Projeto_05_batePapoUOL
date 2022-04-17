@@ -28,10 +28,10 @@ function tratarSucesso(resposta){
         setInterval(function(){
             let promise = axios.post('https://mock-api.driven.com.br/api/v6/uol/status', user);
             promise.then(iAmOnline);
-        },3000);
+        },4900);
         setInterval(function(){
             buscarMensagens();
-        },4900);
+        },3000);
     }
 }
 
@@ -41,7 +41,7 @@ function tratarError(resposta){
 
     if(resposta.response.status === 400){
         alert("Já exite um usuário com esse nome, por favor escolha outro");
-        entrarNaSala();
+        window.location.reload();
     }
 }
 
@@ -96,8 +96,7 @@ function tratarMensagens(mensagem){
                 </span>     
             </li>`);
         }
-        /*mensagem.data[i].type ===  'private_message' & user.name === mensagem.data[i].to*/ 
-        if(mensagem.data[i].type ===  'private_message'){
+        if(mensagem.data[i].type ===  'private_message' & (user.name === mensagem.data[i].to | user.name === mensagem.data[i].from)){
             arrayMsg.push(`
             <li class="msg-priv">
                 <span class="time">
